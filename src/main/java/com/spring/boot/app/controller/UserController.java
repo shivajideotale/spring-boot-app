@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,14 +50,22 @@ public class UserController {
 		return userData;
 	}
 	
-	//	public Optional<User> updateUser(@PathVariable("id") long id){
-	//		
-	//		Optional<User> userData = userRepository.findById(id);
-	//		
-	//		if(userData.isPresent()) {
-	//			
-	//			System.out.println("User is already present" +userData);
-	//		}
-	//		else
-	//		return userData;
+	@PutMapping("update-users/{id}")
+	public Optional<User> updateUser(@PathVariable("id") long id, @RequestBody User user){
+		
+		Optional<User> userData = userRepository.findById(id);
+		
+		if(userData.isPresent()) {
+			
+			User userData1 = userData.get();
+			userData1.setUserName(user.getUserName());
+			userRepository.save(userData1);
+		}
+		else {
+			
+			return Optional.of(new User());
+		}
+		return userData;
+		
+	}
 }
