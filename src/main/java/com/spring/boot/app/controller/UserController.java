@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,25 @@ public class UserController {
 			User userData1 = userData.get();
 			userData1.setUserName(user.getUserName());
 			userRepository.save(userData1);
+		}
+		else {
+			
+			return Optional.of(new User());
+		}
+		return userData;
+		
+	}
+	
+	@DeleteMapping("delete-users/{id}")
+	public Optional<User> deleteUser(@PathVariable("id") long id, @RequestBody User user){
+		
+		Optional<User> userData = userRepository.findById(id);
+		
+		if(userData.isPresent()) {
+			
+			User userData1 = userData.get();
+			userData1.setUserName(user.getUserName());
+			userRepository.delete(userData1);
 		}
 		else {
 			
